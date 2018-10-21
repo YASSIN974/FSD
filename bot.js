@@ -6,13 +6,23 @@ const fetchVideoInfo = require('youtube-info');
 const YouTube = require('simple-youtube-api');
 const youtube = new YouTube("AIzaSyAdORXg7UZUo7sePv97JyoDqtQVi3Ll0b8");
 const queue = new Map();
- const client = new Discord.Client();
-const prefix = "$"
+const client = new Discord.Client();
+ 
+ 
+ 
+client.on('ready', () => {
+    console.log(`Logged in as ${client.user.tag}!`);
+    console.log(`in ${client.guilds.size} servers `)
+    console.log(`[Codes] ${client.users.size}`)
+    client.user.setStatus("dnd")
+ client.user.setGame(`☆`,`https://www.twitch.tv/skwadraa`);
+});
+ 
+const prefix = "1"
 client.on('message', async msg => {
     if (msg.author.bot) return undefined;
     if (!msg.content.startsWith(prefix)) return undefined;
     const args = msg.content.split(' ');
- 
     const searchString = args.slice(1).join(' ');
     const url = args[1] ? args[1] .replace(/<(.+)>/g, '$1') : '';
     const serverQueue = queue.get(msg.guild.id);
@@ -29,7 +39,10 @@ client.on('message', async msg => {
             return msg.channel.send('لا يتوآجد لدي صلاحية للتكلم بهذآ الروم').then(message =>{message.delete(2000)})
         }
  
-       
+        if (!permissions.has('EMBED_LINKS')) {
+            return msg.channel.sendMessage("**يجب توآفر برمشن `EMBED LINKS`لدي **rl").then(message =>{message.delete(2000)})
+            }
+ 
         if (url.match(/^https?:\/\/(www.youtube.com|youtube.com)\/playlist(.*)$/)) {
             const playlist = await youtube.getPlaylist(url);
             const videos = await playlist.getVideos();
@@ -49,11 +62,11 @@ client.on('message', async msg => {
                     var videos = await youtube.searchVideos(searchString, 5);
                     let index = 0;
                    
+                 
                     msg.channel.send(`**
 ${videos.map(video2 => `[\`${++index}\`]${video2.title}`).join('\n')}**`).then(message =>{
  
                         message.delete(15000)
- 
  
                     });
                     try {
@@ -182,7 +195,6 @@ function play(guild, song) {
     const serverQueue = queue.get(guild.id);
  
     if (!song) {
-      serverQueue.voiceChannel.leave();
         queue.delete(guild.id);
         return;
     }
@@ -228,69 +240,4 @@ function play(guild, song) {
 })
 }
 });
-client.on('message' , message => {
-  var prefix = "*";
-  if(message.author.bot) return;
- 
-  if(message.content.startsWith(prefix + "xo")) {
- let array_of_mentions = message.mentions.users.array();
-  let symbols = [':o:', ':heavy_multiplication_x:']
-  var grid_message;
- 
-  if (array_of_mentions.length == 1 || array_of_mentions.length == 2) {
-    let random1 = Math.floor(Math.random() * (1 - 0 + 1)) + 0;
-    let random2 = Math.abs(random1 - 1);
-    if (array_of_mentions.length == 1) {
-      random1 = 0;
-      random2 = 0;
-    }
-    var player1_id = message.author.id
-    let player2_id = array_of_mentions[random2].id;
-    var turn_id = player1_id;
-    var symbol = symbols[0];
-    let initial_message = `Game match between <@${player1_id}> and <@${player2_id}>!`;
-    if (player1_id == player2_id) {
-      initial_message += '\n_(What a loser, playing this game with yourself :joy:)_'
-    }
-    message.channel.send(`Xo ${initial_message}`)
-    .then(console.log("Successful tictactoe introduction"))
-    .catch(console.error);
-    message.channel.send(':one::two::three:' + '\n' +
-                         ':four::five::six:' + '\n' +
-                         ':seven::eight::nine:')
-    .then((new_message) => {
-      grid_message = new_message;
-    })
-    .then(console.log("Successful tictactoe game initialization"))
-    .catch(console.error);
-    message.channel.send('Loading... Please wait for the :ok: reaction.')
-    .then(async (new_message) => {
-      await new_message.react('1⃣');
-      await new_message.react('2⃣');
-      await new_message.react('3⃣');
-      await new_message.react('4⃣');
-      await new_message.react('5⃣');
-      await new_message.react('6⃣');
-      await new_message.react('7⃣');
-      await new_message.react('8⃣');
-      await new_message.react('9⃣');
-      await new_message.react('🆗');
-      await new_message.edit(`It\'s <@${turn_id}>\'s turn! Your symbol is ${symbol}`)
-      .then((new_new_message) => {
-        require('./xo.js')(client, message, new_new_message, player1_id, player2_id, turn_id, symbol, symbols, grid_message);
-      })
-      .then(console.log("Successful tictactoe listener initialization"))
-      .catch(console.error);
-    })
-    .then(console.log("Successful tictactoe react initialization"))
-    .catch(console.error);
-  }
-  else {
-    message.channel.send(`try *xo @uesr`)
-    .then(console.log("Successful error reply"))
-    .catch(console.error);
-  }
-}
- });
- 
 client.login(process.env.BOT_TOKEN);
