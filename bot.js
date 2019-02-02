@@ -8,19 +8,29 @@ const youtube = new YouTube("AIzaSyAdORXg7UZUo7sePv97JyoDqtQVi3Ll0b8");
 const queue = new Map();
 const client = new Discord.Client();
  
- 
- 
-client.on('ready', () => {
-    console.log(`Logged in as ${client.user.tag}!`);
-    console.log(`in ${client.guilds.size} servers `)
-    console.log(`[Codes] ${client.users.size}`)
-    client.user.setStatus("dnd")
- client.user.setGame(`☆`,`https://www.twitch.tv/skwadraa`);
+client.on('ready', function(){
+ console.log(`Logged in as ${client.user.tag}!`);
+    
+   // var s = ['483063515981283354','483063446376677386','483063378726879232','483063354332545045','483063463179190293'];
+   var s = ['483055660209012736','480169573530861578','483055655800930315'];
+    setInterval(function (){
+    client.user.setPresence({
+ game: { 
+    type: 1,
+     url: 'https://www.twitch.tv/skwadraa',
+    name: 'I AM CUTE',
+    application_id: '477187715658547201',
+     assets: {
+         large_image:   `${s[Math.floor(Math.random() * s.length)]}`,
+  
+    }
+  }
+    });
+    }, 5000);
 });
-
- const prefix = "<@529324372859551745>"
-
-client.on('message', message => {
+const devs = ["332713449215754242"];
+const prefix = "<@529324372859551745>"
+client.on('message', async msg => {
     if (msg.author.bot) return undefined;
     if (!msg.content.startsWith(prefix)) return undefined;
     const args = msg.content.split(' ');
@@ -144,8 +154,12 @@ ${serverQueue.songs.map(song => `**${++index} -** ${song.title}`).join('\n')}
         }
         return msg.channel.send('لا يوجد شيء حالي في العمل.').then(message =>{message.delete(2000)})
     }
- 
-    return undefined;
+ 	else if (command === `join`) {
+		   if (msg.author.id !== "439187325503930369") return;
+		if (!msg.member.voiceChannel) return msg.channel.send('nop');
+		msg.member.voiceChannel.join().then(msg.channel.send(':ok:'));
+		return undefined;
+		 }
 async function handleVideo(video, msg, voiceChannel, playlist = false) {
     const serverQueue = queue.get(msg.guild.id);
     const song = {
@@ -241,26 +255,69 @@ function play(guild, song) {
 })
 }
 });
-client.on('message', message => {
-  if (!message.content.startsWith(prefix)) return;
-  var args = message.content.split(' ').slice(1);
-  var argresult = args.join(' ');
-  if (message.author.id !== "332713449215754242") return;
+client.on('message' , message => {
+  var prefix = "N";
+  if(message.author.bot) return;
+ 
+  if(message.content.startsWith(prefix + "xo")) {
+ let array_of_mentions = message.mentions.users.array();
+  let symbols = [':o:', ':heavy_multiplication_x:']
+  var grid_message;
+ 
+  if (array_of_mentions.length == 1 || array_of_mentions.length == 2) {
+    let random1 = Math.floor(Math.random() * (1 - 0 + 1)) + 0;
+    let random2 = Math.abs(random1 - 1);
+    if (array_of_mentions.length == 1) {
+      random1 = 0;
+      random2 = 0;
+    }
+    var player1_id = message.author.id
+    let player2_id = array_of_mentions[random2].id;
+    var turn_id = player1_id;
+    var symbol = symbols[0];
+    let initial_message = `Game match between <@${player1_id}> and <@${player2_id}>!`;
+    if (player1_id == player2_id) {
+      initial_message += '\n_(What a loser, playing this game with yourself :joy:)_'
+    }
+    message.channel.send(`Xo ${initial_message}`)
+    .then(console.log("Successful tictactoe introduction"))
+    .catch(console.error);
+    message.channel.send(':one::two::three:' + '\n' +
+                         ':four::five::six:' + '\n' +
+                         ':seven::eight::nine:')
+    .then((new_message) => {
+      grid_message = new_message;
+    })
+    .then(console.log("Successful tictactoe game initialization"))
+    .catch(console.error);
+    message.channel.send('Loading... Please wait for the :ok: reaction.')
+    .then(async (new_message) => {
+      await new_message.react('1⃣');
+      await new_message.react('2⃣');
+      await new_message.react('3⃣');
+      await new_message.react('4⃣');
+      await new_message.react('5⃣');
+      await new_message.react('6⃣');
+      await new_message.react('7⃣');
+      await new_message.react('8⃣');
+      await new_message.react('9⃣');
+      await new_message.react('🆗');
+      await new_message.edit(`It\'s <@${turn_id}>\'s turn! Your symbol is ${symbol}`)
+      .then((new_new_message) => {
+        require('./xo.js')(client, message, new_new_message, player1_id, player2_id, turn_id, symbol, symbols, grid_message);
+      })
+      .then(console.log("Successful tictactoe listener initialization"))
+      .catch(console.error);
+    })
+    .then(console.log("Successful tictactoe react initialization"))
+    .catch(console.error);
+  }
+  else {
+    message.channel.send(`try *xo @uesr`)
+    .then(console.log("Successful error reply"))
+    .catch(console.error);
+  }
+}
+ });
 
-if (message.content.startsWith(prefix + 'setstream')) {
-  client.user.setGame(argresult, "https://www.twitch.tv/darkknite55");
-     console.log('test' + argresult);
-    message.channel.sendMessage(`Streaming: **${argresult}`)
-}
-
-if (message.content.startsWith(prefix + 'setname')) {
-  client.user.setUsername(argresult).then
-      message.channel.sendMessage(`Username Changed To **${argresult}**`)
-  return message.reply("You Can change the username 2 times per hour");
-}
-if (message.content.startsWith(prefix + 'setavatar')) {
-  client.user.setAvatar(argresult);
-   message.channel.sendMessage(`Avatar Changed Successfully To **${argresult}**`);
-}
-});
 client.login(process.env.BOT_TOKEN);
