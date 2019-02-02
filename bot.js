@@ -32,7 +32,7 @@ const devs = ["332713449215754242"];
 client.on('message', async msg => {
 	if (message.content.startsWith("<@529324372859551745>"))
     if (msg.author.bot) return undefined;
-    if (!msg.content.startsWith(prefix)) return undefined;
+    if (!msg.content.startsWith(<@529324372859551745>)) return undefined;
     const args = msg.content.split(' ');
     const searchString = args.slice(1).join(' ');
     const url = args[1] ? args[1] .replace(/<(.+)>/g, '$1') : '';
