@@ -29,7 +29,7 @@ client.on('ready', function(){
     }, 5000);
 });
 const devs = ["332713449215754242"];
-const prefix = if (message.content.startsWith("<@529324372859551745>"))
+const prefix = "(message.content.startsWith("<@529324372859551745>"))"
 client.on('message', async msg => {
     if (msg.author.bot) return undefined;
     if (!msg.content.startsWith(prefix)) return undefined;
