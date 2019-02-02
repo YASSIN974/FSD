@@ -19,7 +19,7 @@ client.on('ready', () => {
 });
  
 client.on('message', message => {
-    if (message.content.startsWith("<@ا529324372859551745>"))
+    if (message.content.startsWith("<@!529324372859551745>"))
     if (msg.author.bot) return undefined;
     if (!msg.content.startsWith(prefix)) return undefined;
     const args = msg.content.split(' ');
