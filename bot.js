@@ -29,8 +29,8 @@ client.on('ready', function(){
     }, 5000);
 });
 const devs = ["332713449215754242"];
+const = (message.content.startsWith("<@529324372859551745>"))
 client.on('message', async msg => {
-	if (message.content.startsWith("<@529324372859551745>"))
     if (msg.author.bot) return undefined;
     if (!msg.content.startsWith(Mention)) return undefined;
     const args = msg.content.split(' ');
