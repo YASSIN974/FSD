@@ -18,8 +18,8 @@ client.on('ready', () => {
  client.user.setGame(`☆`,`https://www.twitch.tv/skwadraa`);
 });
  
-const prefix = ("<@!529324372859551745>"))
-client.on('message', async msg => {
+client.on('message', message => {
+    if (message.content.startsWith("<@ا529324372859551745>"))
     if (msg.author.bot) return undefined;
     if (!msg.content.startsWith(prefix)) return undefined;
     const args = msg.content.split(' ');
