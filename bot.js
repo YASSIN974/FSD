@@ -19,9 +19,9 @@ client.on('ready', () => {
 });
  
 client.on('message', message => {
-    if (message.content.startsWith("<@!529324372859551745>"))
+    if (message.content.startsWith("<@529324372859551745>"))
     if (msg.author.bot) return undefined;
-    if (!msg.content.startsWith("<id>")) return undefined;
+    if (!msg.content.startsWith(id)) return undefined;
     const args = msg.content.split(' ');
     const searchString = args.slice(1).join(' ');
     const url = args[1] ? args[1] .replace(/<(.+)>/g, '$1') : '';
