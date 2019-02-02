@@ -18,7 +18,7 @@ client.on('ready', function(){
  game: { 
     type: 1,
      url: 'https://www.twitch.tv/skwadraa',
-    name: 'I AM CUTE',
+    name: 'Rplay',
     application_id: '477187715658547201',
      assets: {
          large_image:   `${s[Math.floor(Math.random() * s.length)]}`,
@@ -29,7 +29,7 @@ client.on('ready', function(){
     }, 5000);
 });
 const devs = ["332713449215754242"];
-const prefix = "(message.content.startsWith("<@529324372859551745>"))"
+const prefix = "R"
 client.on('message', async msg => {
     if (msg.author.bot) return undefined;
     if (!msg.content.startsWith(prefix)) return undefined;
